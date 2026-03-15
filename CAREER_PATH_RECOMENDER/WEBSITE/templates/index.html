@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Recommender Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="light-mode">
+    <div class="theme-switch">
+        <button onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+    </div>
+
+    <div class="container">
+        <div class="header-group">
+            <div class="student-sign">👨‍🎓</div>
+            <h1 class="main-title">Career Path Recommender</h1>
+        </div>
+
+        {% if top_results %}
+        <div class="result-section">
+            <h2 class="result-title">Your Top Matches</h2>
+            <div class="top-match">
+                <span class="badge">#1 Best Match</span>
+                <h3>{{ top_results[0].name }}</h3>
+                <p>{{ top_results[0].desc }}</p>
+                <div class="score-pill">Match Score: {{ top_results[0].score }}</div>
+            </div>
+            <div class="other-matches">
+                <div class="match-card">
+                    <h4>#2 {{ top_results[1].name }}</h4>
+                    <p>Score: {{ top_results[1].score }}</p>
+                </div>
+                <div class="match-card">
+                    <h4>#3 {{ top_results[2].name }}</h4>
+                    <p>Score: {{ top_results[2].score }}</p>
+                </div>
+            </div>
+            <a href="/" class="retry-btn">Retake Quiz</a>
+        </div>
+        {% else %}
+
+        <form action="/recommend" method="POST">
+            {% set questions = [
+            "Do you enjoy coding or programming?", "Do you enjoy working with numbers or data?",
+            "Are you interested in Artificial Intelligence?", "Do you enjoy designing websites?",
+            "Do you like solving logical problems?", "Are you interested in computer security or ethical hacking?",
+            "Do you enjoy creative designing or drawing?", "Do you enjoy using social media platforms?",
+            "Do you like explaining concepts to others?", "Do you enjoy performing in front of people?",
+            "Do you enjoy creating videos or content?", "Do you enjoy solving mathematical problems?",
+            "Do you like working on computers for long hours?", "Are you interested in business or startups?",
+            "Do you enjoy solving real-world problems?", "Do you enjoy learning new technologies?",
+            "Do you enjoy photography or visual creativity?", "Do you enjoy analysing trends and patterns?",
+            "Do you enjoy interacting with many people?", "Do you like creating something new or innovative?"
+            ] %}
+
+            {% for q in questions %}
+            <div class="question">
+                <p>{{ loop.index }}. {{ q }}</p>
+                <label><input type="radio" name="q{{ loop.index }}" value="yes" required> Yes</label>
+                <label><input type="radio" name="q{{ loop.index }}" value="no"> No</label>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="submit-btn">Analyze My Career</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('theme-btn');
+            if (body.classList.contains('light-mode')) {
+                body.classList.replace('light-mode', 'dark-mode');
+                btn.innerHTML = "☀️ Light Mode";
+            } else {
+                body.classList.replace('dark-mode', 'light-mode');
+                btn.innerHTML = "🌙 Dark Mode";
+            }
+        }
+    </script>
+</body>
+
+</html>
