@@ -2,7 +2,6 @@ import sys
 import os
 from flask import Flask, render_template, request
 
-# Path setup to find your description file outside the WEBSITE folder
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from career_description import career_description
 
@@ -14,7 +13,7 @@ def home():
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
-    # Initialize scores for all careers
+  
     scores = {career: 0 for career in career_description.keys()}
     ans = request.form 
 
@@ -40,10 +39,8 @@ def recommend():
     if ans.get('q19') == 'yes': scores["Teacher"] += 1; scores["Digital Marketer"] += 1; scores["Actor"] += 1
     if ans.get('q20') == 'yes': scores["Entrepreneur"] += 2
 
-    # Sort careers by score descending
     sorted_careers = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-    
-    # Format Top 3 results for the frontend
+
     top_3 = []
     for i in range(3):
         name = sorted_careers[i][0]
@@ -56,5 +53,4 @@ def recommend():
     return render_template('index.html', top_results=top_3)
 
 if __name__ == '__main__':
-    # Using Port 8080 to avoid macOS AirPlay conflicts
     app.run(debug=True, port=8080)
